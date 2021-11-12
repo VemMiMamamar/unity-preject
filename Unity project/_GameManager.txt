@@ -1,0 +1,52 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class _GameManager : MonoBehaviour
+{
+    public float cooldown, actualTime;
+    public float cooldown1, actualTime1;
+    public int clicks = 0;
+    public Text click_txt;
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Time.time > actualTime)
+        {
+            actualTime = Time.time + cooldown;
+            if (GetComponent<game1>().cont_Alunos >= 1)
+            {
+                clicks += FindObjectOfType<game1>().cont_Alunos;
+            }
+
+        }
+        if (Time.time > actualTime1)
+        {
+            actualTime1 = Time.time + cooldown1;
+            if (FindObjectOfType<game1>().materia == 1)
+            {
+                clicks += 2;
+            }
+            if (FindObjectOfType<game1>().materia == 2)
+            {
+                clicks += 3;
+            }
+            if (FindObjectOfType<game1>().materia == 3)
+            {
+                clicks += 5;
+            }
+        }
+        click_txt.text = "" + clicks;
+    }
+    public void ClickMais()
+    {
+        clicks++;
+    }
+}

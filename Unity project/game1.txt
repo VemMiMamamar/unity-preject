@@ -1,0 +1,237 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class game1 : MonoBehaviour
+{
+    public Text qnt_cliques;
+
+
+    public Text preco_Cadeira;
+    public Text qnt_cadeiras;
+
+    public Text preco_Mesa;
+    public Text qnt_mesas;
+
+    public Text preco_Materia;
+    public Text qnt_Materia;
+
+    public GameObject cadera;
+    public GameObject meza;
+    public GameObject estudante1;
+    public GameObject estudante2;
+
+    public GameObject Geografia;
+    public GameObject Matematica;
+    public GameObject Portugues;
+
+    public GameObject GeoNaTela;
+    public GameObject MatNaTela;
+    public GameObject PortNaTela;
+
+    public GameObject GeoPorCima;
+    public GameObject MatPorCima;
+    public GameObject PortPorCima;
+
+    public int materia_Preco;
+    public int aumento_materia = 50;
+    public int materia = 0;
+
+    public int mesa_Preco;
+    public int aumento_mesa = 25;
+    public int mesa = 0;
+
+    public bool[] alunos;
+
+    public int cadeira_Preco = 100;
+    public int aumento_Cadeira = 15;
+    public int cadeira ;
+
+    public int pratileiras = 0;
+
+    public int cont_Alunos = 0;
+    // Start is called before the first frame update
+    void Start()
+    {
+        cadeira = 0;
+        preco_Cadeira.text = "" + cadeira_Preco;
+        qnt_cadeiras.text = "" + cadeira;
+
+
+        mesa_Preco = 120;
+        preco_Mesa.text = "" + mesa_Preco;
+        qnt_mesas.text = "" + mesa;
+
+        materia_Preco = 300;
+        preco_Materia.text = "" + materia_Preco;
+        qnt_Materia.text = "" + materia;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (materia == 3)
+        {
+            preco_Materia.text = "MAX";
+            qnt_Materia.text = "MAX";
+        }
+
+        if (cadeira == 8)
+        {
+            preco_Cadeira.text = "MAX";
+            qnt_cadeiras.text = "MAX";
+        }
+
+        if (mesa == 8)
+        {
+            preco_Mesa.text = "MAX";
+            qnt_mesas.text = "MAX";
+        }
+    }
+
+    public void Funcao()
+    {
+        FindObjectOfType<_GameManager>().ClickMais();
+        //GetComponent<_GameManager>().clicks++;
+        //string click = string.Format("{0}", GetComponent<_GameManager>().clicks);
+        //qnt_cliques.text = click;
+    }
+
+    public float x = 7, y = -3.5f, z = -1;
+    public void Compra()
+    {
+        if (cadeira < 8)
+        {
+            if (FindObjectOfType<_GameManager>().clicks >= cadeira_Preco)
+            {
+                FindObjectOfType<_GameManager>().clicks -= cadeira_Preco;
+                cadeira_Preco += aumento_Cadeira;
+                cadeira++;
+                if (cadeira <= 8)
+                {
+                    Instantiate(cadera, new Vector3(x, y, z), new Quaternion());
+                }
+                aumento_Cadeira += Random.Range(1, 5);
+                x -= 3.5f;
+                if (cadeira >= 4 && y == -3.5)
+                {
+                    if (x <= -5)
+                    {
+                        x += 14;
+                    }
+                    y += 2.3f;
+                }
+            }
+            preco_Cadeira.text = "" + cadeira_Preco;
+            qnt_cadeiras.text = "" + cadeira;
+            AddAluno();
+        }
+    }
+
+    public float x1 = 7, y1 = -3.5f, z1 = -0.5f;
+    public void CompraMesa()
+    {
+        if (mesa < 8)
+        {
+            if (FindObjectOfType<_GameManager>().clicks >= mesa_Preco)
+            {
+                FindObjectOfType<_GameManager>().clicks -= mesa_Preco;
+                mesa_Preco += aumento_mesa;
+                mesa++;
+                if (mesa <= 8)
+                {
+                    Instantiate(meza, new Vector3(x1, y1, z1), new Quaternion());
+                }
+                x1 -= 3.5f;
+                if (mesa >= 4 && y1 == -3.5)
+                {
+                    if (x1 <= -5)
+                    {
+                        x1 += 14;
+                    }
+                    y1 += 2.3f;
+                }
+                aumento_mesa += Random.Range(1, 10);
+                preco_Mesa.text = "" + mesa_Preco;
+                qnt_mesas.text = "" + mesa;
+                AddAluno();
+            }
+        }
+    }
+
+    public float xLivro = -7.75f, yLivro = -3.6f, zLivro = -1;
+    public void CompraMateria()
+    {
+        if (materia < 3)
+        {
+            if (FindObjectOfType<_GameManager>().clicks >= materia_Preco)
+            {
+                FindObjectOfType<_GameManager>().clicks -= materia_Preco;
+                materia_Preco += aumento_materia;
+                materia++;
+                if (materia == 1)
+                {
+                    Instantiate(Geografia, new Vector3(xLivro, yLivro, zLivro), new Quaternion());
+                    Instantiate(MatNaTela, new Vector3(-1, 2, 0), new Quaternion());
+                }
+                if (materia == 2)
+                {
+                    Instantiate(Matematica, new Vector3(xLivro, yLivro, zLivro), new Quaternion());
+                    Instantiate(PortNaTela, new Vector3(-1, 2, 0), new Quaternion());
+                }
+                if (materia == 3)
+                {
+                    Instantiate(Portugues, new Vector3(xLivro, yLivro, zLivro), new Quaternion());
+
+                    Instantiate(GeoPorCima, new Vector3(-1.5f, 2, 0), new Quaternion());
+                    Instantiate(MatPorCima, new Vector3(-1, 2, 0), new Quaternion());
+                    Instantiate(PortPorCima, new Vector3(-0.5f, 2, 0), new Quaternion());
+                }
+                xLivro += 0.5f;
+                aumento_materia += Random.Range(20, 50);
+                preco_Materia.text = "" + materia_Preco;
+                qnt_Materia.text = "" + materia;
+            }
+        }
+    }
+
+    public float xEstudante = 7, yEstudante = -3.5f, zEstudante = -0.5f;
+    public void AddAluno()
+    {
+        print(cont_Alunos);
+        for (int i = 0; i < cadeira; i++)
+        {
+            if (i < mesa)
+            {
+                if (!alunos[i])
+                {
+                    if (cont_Alunos < 4)
+                    {
+                        Instantiate(estudante1, new Vector3(xEstudante, yEstudante, zEstudante), new Quaternion());
+                    }
+                    if (cont_Alunos >= 4)
+                    {
+                        Instantiate(estudante2, new Vector3(xEstudante, yEstudante, zEstudante), new Quaternion());
+                    }
+                    alunos[i] = true;
+                    xEstudante -= 3.5f;
+                    cont_Alunos++;
+                }
+                if (cont_Alunos >= 4 && yEstudante == -3.5f)
+                {
+                    if (xEstudante <= -5)
+                    {
+                        xEstudante += 14;
+                        zEstudante = -1;
+                    }
+                    yEstudante += 2.3f;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+}
